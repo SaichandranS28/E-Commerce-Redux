@@ -4,9 +4,11 @@ import { removeFromCart } from '../Redux/cartSlice'
 
 function Cart() {
   const dispatch = useDispatch()
-  const {items, total} = useSelector((state)=> state.cart)
+  const {items, total, actualPrice} = useSelector((state)=> state.cart)
   const count = items.length
   let price_separator = (total).toLocaleString('en-IN')
+  let actual_Price = Math.floor(actualPrice).toLocaleString('en-IN')
+  let discounted = Math.floor(((actualPrice-total)/actualPrice)*100)
 
   return (
     <div>
@@ -41,7 +43,7 @@ function Cart() {
                     <div className="px-3">
                       <div className="flex justify-between">
                         <h1>Price</h1>
-                        <h1 className='text-start'>{price_separator}</h1>
+                        <h1 className='text-start'>₹ {actual_Price}</h1>
                       </div>
                       <div className="flex justify-between">
                         <h1>Delivery</h1>
@@ -49,7 +51,7 @@ function Cart() {
                       </div>
                       <div className="flex justify-between">
                         <h1>Discount</h1>
-                        <h1 className='text-red-600 font-medium'>27%</h1>
+                        <h1 className='text-red-600 font-medium'>{discounted}%</h1>
                       </div>
                     </div>
                   </div>
@@ -59,6 +61,7 @@ function Cart() {
                       <h1 className='text-2xl font-bold'>₹ {price_separator}</h1>
                     </div>
                   </div>
+                  <button className='mt-3 w-full py-3 rounded-xl bg-black text-white font-semibold'>Proceed to buy</button>
                 </div>
               </div> : null
               }

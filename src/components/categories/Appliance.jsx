@@ -1,24 +1,23 @@
-import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import Card from './Card'
+import React, { useEffect,useState } from 'react'
+import Card from '../Card'
 
-function Home() {
-    let [products,setProducts] = useState([])
-
+function Appliance() {
+    let [appliance, setAppliance] = useState([])
     useEffect(()=>{
-        axios.get('https://fakestoreapi.in/api/products?limit=150').then((response)=>{
-            setProducts(response.data.products)
+        axios.get('https://fakestoreapi.in/api/products/category?type=appliances').then((response)=>{
+            setAppliance(response.data.products)
         })
-    }, [])
-
+    },[])
   return (
-    <div className='mt-5'>
+    <div>
+      <div className='mt-5'>
       <div className="max-w-8xl mx-auto py-24">
         {
-            products.length > 0 ? 
+            appliance.length > 0 ? 
                 <div className="flex flex-wrap gap-4 justify-center">
                 {
-                    products.map((product)=>{
+                    appliance.map((product)=>{
                         return <Card key={product.id} id={product.id} img={product.image} title={product.title} price={product.price} discount={product.discount}/>
                     })
                 }
@@ -28,7 +27,8 @@ function Home() {
         
       </div>
     </div>
+    </div>
   )
 }
 
-export default Home
+export default Appliance

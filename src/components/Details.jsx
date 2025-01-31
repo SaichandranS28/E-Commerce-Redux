@@ -2,7 +2,7 @@ import axios from 'axios'
 import React, { useEffect,useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { MdCurrencyRupee } from "react-icons/md";
-import { useDispatch } from 'react-redux';
+import { useSelector,useDispatch } from 'react-redux';
 import { addToCart } from '../Redux/cartSlice';
 
 function Details() {
@@ -10,8 +10,11 @@ function Details() {
     let [product,setProduct] = useState([])
     let price_separator = (product.price*80).toLocaleString('en-IN')
     let original_price = Math.floor(((product.price*80)/(1-(product.discount/100)))).toLocaleString('en-IN')
+    let {items} = useSelector((state)=> state.cart)
     const dispatch = useDispatch()
-    
+
+    let exist = product.id ? items.some((item)=> item.id === product.id) : null
+   
     useEffect(()=>{
         axios.get(`https://fakestoreapi.in/api/products/${id}`).then((response)=>{
             setProduct(response.data.product)
@@ -31,6 +34,7 @@ function Details() {
                 <h1 className='text-center mt-52'><span class="loader"></span></h1>         
             : 
                 <div className="">
+                    
                     <div className="max-w-7xl mx-auto px-8 py-5 mt-5 shadow-xl flex items-center gap-5">
                         <div className="w-1/2">
                             <img src={product.image} className='h-[500px] object-contain' alt="" />
@@ -72,10 +76,7 @@ function Details() {
                             </div>
                             <h1 className='font-semibold mt-3 text-lg mb-1'>About this product:</h1>
                             <h1 className='text-sm text-gray-700 text-justify'>{product.description}</h1>
-                            <div className="flex items-center gap-4">
-                                <button className='mt-4 px-8 py-3 bg-[#fcfcfc] border font-semibold'>Buy now</button>
-                                <button onClick={handleAddCart} className='mt-4 px-8 py-3 bg-black text-white font-semibold'>Add to Cart</button>
-                            </div>
+                                 <button onClick={handleAddCart} className={`mt-4 px-8 py-3 transition-all ${exist ? 'bg-green-100 text-green-600 transition-all rounded-3xl' : 'bg-black text-white rounded-3xl'} font-semibold`}>{exist ? 'Added to Cart' : 'Add to Cart'}</button>
                         </div>
                     </div>
                 </div>
